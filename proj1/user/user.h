@@ -1,0 +1,1 @@
+int calculate(int x, int y, char* op, int* result);
