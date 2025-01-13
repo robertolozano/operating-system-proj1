@@ -25,10 +25,10 @@ int main(int argc, char *argv[]) {
     test_calculate(20, 10, '/', 2, 0); 
 
     // Division by zero
-    test_calculate(10, 0, '/', 0, -1); // 10 / 0 = error
+    test_calculate(10, 0, '/', 0, -1);
 
     // Invalid operator
-    test_calculate(10, 20, '%', 0, -1); // Invalid operator '%'
+    test_calculate(10, 20, '%', 0, -1); 
 
     printf("All tests completed.\n");
     exit(0);
