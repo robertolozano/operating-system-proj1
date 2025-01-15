@@ -8,15 +8,19 @@
 
 int sys_calculate(void) {
     int x, y;
-    char op[2];
-    uint64 result_addr;
+    char op[2] = {0};  
+    uint64 op_addr;    
+    uint64 result_addr; 
 
-    argint(0, &x);
-    argint(1, &y);
-    if (argstr(2, op, sizeof(op)) < 0) {
-        return -1;
+    argint(0, &x);       
+    argint(1, &y);        
+    argaddr(2, &op_addr); 
+    argaddr(3, &result_addr); 
+
+    if (copyin(myproc()->pagetable, op, op_addr, sizeof(op)) < 0) {
+        printf("copyin failed: unable to copy operator from user space\n");
+        return -1; 
     }
-    argaddr(3, &result_addr);
 
     int result;
     if (op[0] == '+') {
@@ -28,12 +32,14 @@ int sys_calculate(void) {
     } else if (op[0] == '/' && y != 0) {
         result = x / y;
     } else {
-        return -1;
+        printf("Invalid operator: %c\n", op[0]);
+        return -1; 
     }
 
-    if (copyout(myproc()->pagetable, result_addr, (char*)&result, sizeof(result)) < 0) {
-        return -1;
+    if (copyout(myproc()->pagetable, result_addr, (char *)&result, sizeof(result)) < 0) {
+        printf("copyout failed: unable to copy result to user space\n");
+        return -1; 
     }
 
-    return 0;
+    return 0; 
 }
